@@ -1,0 +1,21 @@
+version: '3'
+
+tasks:
+  default:
+    desc: Start BE and FE together
+    aliases: [dev, dev-react]
+    deps: [dotnet, frontend]
+
+  backend:
+    desc: Run the Backend API
+    dir: backend
+    cmds:
+      - dotnet run
+    prefix: backend
+
+  frontend:
+    desc: Run the Frontend dev server
+    dir: frontend
+    cmds:
+      - npm run dev
+    prefix: frontend
