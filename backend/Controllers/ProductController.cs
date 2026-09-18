@@ -36,12 +36,7 @@ namespace StockMan.Controllers
           p.CreatedAt, p.UpdatedAt))
         .FirstOrDefaultAsync();
 
-      if (product is null)
-      {
-        return NotFound();
-      }
-
-      return product;
+      return product ?? (ActionResult<ProductResponse>)NotFound();
     }
   }
 }
