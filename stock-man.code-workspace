@@ -53,6 +53,9 @@
       "backend": true,
 			"frontend": true,
     },
+    "[csharp]": {
+      "editor.defaultFormatter": "JakubKozera.csharp-dev-tools"
+    },
     // "css.lint.unknownAtRules": "ignore",
     // "scss.lint.unknownAtRules": "ignore",
     // "less.lint.unknownAtRules": "ignore"

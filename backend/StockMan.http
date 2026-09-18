@@ -1,6 +1,78 @@
-@StockMan_HostAddress = http://localhost:5006
+@HostAddress = http://localhost:5006
 
-GET {{StockMan_HostAddress}}/weatherforecast/
+###
+
+# @name login
+POST {{HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "Email": "andy@example.com",
+  "Password": "P@ssword1"
+}
+###
+
+POST {{HostAddress}}/api/Auth/register
+Content-Type: application/json
+
+{
+	"FirstName": "Andy",
+	"LastName": "Wright",
+  "UserName": "andy@example.com",
+  "Email": "andy@example.com",
+  "Password": "P@ssword1"
+}
+
+###
+
+@authToken = {{login.response.body.token}}
+
+GET {{HostAddress}}/api/products
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+GET {{HostAddress}}/api/products/1
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+POST {{HostAddress}}/api/products
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "sku": "SKU-1001",
+  "name": "Widget",
+  "description": "A standard widget",
+  "barcode": "0123456789012",
+  "reorderThreshold": 10,
+  "minimumReorderQuantity": 25,
+  "unitCost": 4.99
+}
+
+###
+
+PUT {{HostAddress}}/api/products/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "sku": "SKU-1001",
+  "name": "Widget Pro",
+  "description": "An upgraded widget",
+  "barcode": "0123456789012",
+  "reorderThreshold": 8,
+  "minimumReorderQuantity": 20,
+  "unitCost": 6.49
+}
+
+###
+
+DELETE {{HostAddress}}/api/products/1
+Authorization: Bearer {{authToken}}
 Accept: application/json
 
 ###
