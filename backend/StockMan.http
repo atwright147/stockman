@@ -1,4 +1,5 @@
 @HostAddress = http://localhost:5006
+@authToken = {{login.response.body.token}}
 
 ###
 
@@ -10,6 +11,7 @@ Content-Type: application/json
   "Email": "andy@example.com",
   "Password": "P@ssword1"
 }
+
 ###
 
 POST {{HostAddress}}/api/Auth/register
@@ -24,8 +26,6 @@ Content-Type: application/json
 }
 
 ###
-
-@authToken = {{login.response.body.token}}
 
 GET {{HostAddress}}/api/products
 Authorization: Bearer {{authToken}}
