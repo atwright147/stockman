@@ -19,3 +19,8 @@ tasks:
     cmds:
       - npm run dev
     prefix: frontend
+
+  teardown:
+    desc: Remove local SQLite database files
+    cmds:
+      - rm -f backend/app.db backend/app.db-shm backend/app.db-wal

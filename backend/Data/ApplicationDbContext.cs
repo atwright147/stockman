@@ -9,5 +9,6 @@ namespace StockMan.Data
     : IdentityDbContext<ApplicationUser>(options)
   {
     public DbSet<Product> Products { get; set; }
+    public DbSet<Location> Locations { get; set; }
   }
 }

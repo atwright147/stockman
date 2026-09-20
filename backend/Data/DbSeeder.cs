@@ -10,7 +10,7 @@ namespace StockMan.Data
     ApplicationDbContext db,
     UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole> roleManager,
-    int productCount = 100)
+    int productCount = 100, int locationCount = 25)
   {
     public async Task SeedAsync()
     {
@@ -23,7 +23,7 @@ namespace StockMan.Data
         return;
       }
 
-      var faker = new Faker<Product>()
+      var fakerProducts = new Faker<Product>()
         .RuleFor(p => p.Sku, f => $"SKU-{f.Commerce.Ean8()}-{f.IndexGlobal}")
         .RuleFor(p => p.Name, f => f.Commerce.ProductName())
         .RuleFor(p => p.Description, f => f.Commerce.ProductDescription())
@@ -34,9 +34,21 @@ namespace StockMan.Data
         .RuleFor(p => p.CreatedAt, f => f.Date.Past(1))
         .RuleFor(p => p.UpdatedAt, (f, p) => f.Random.Bool(0.5f) ? f.Date.Between(p.CreatedAt, DateTime.UtcNow) : null);
 
-      var products = faker.Generate(productCount);
+      var products = fakerProducts.Generate(productCount);
 
       await db.Products.AddRangeAsync(products);
+
+      var fakerLocations = new Faker<Location>()
+        .RuleFor(l => l.Aisle, f => f.Commerce.ProductName())
+        .RuleFor(l => l.Shelf, f => f.Commerce.ProductName())
+        .RuleFor(l => l.Container, f => f.Commerce.ProductDescription())
+        .RuleFor(l => l.Code, f => f.Commerce.Ean13())
+        .RuleFor(l => l.IsActive, f => f.Random.Bool());
+
+      var locations = fakerLocations.Generate(locationCount);
+
+      await db.Locations.AddRangeAsync(locations);
+
       await db.SaveChangesAsync();
     }
 
