@@ -38,5 +38,41 @@ namespace StockMan.Controllers
 
       return product ?? (ActionResult<ProductResponse>)NotFound();
     }
+
+    // POST: api/products
+    [HttpPost()]
+    public async Task<ActionResult<ProductResponse>> PostProduct(ProductCreateRequest product)
+    {
+      var entity = new Product
+      {
+        Sku = product.Sku,
+        Name = product.Name,
+        Description = product.Description,
+        Barcode = product.Barcode,
+        ReorderThreshold = product.ReorderThreshold,
+        MinimumReorderQuantity = product.MinimumReorderQuantity,
+        UnitCost = product.UnitCost,
+        CreatedAt = DateTime.UtcNow,
+      };
+
+      context.Products.Add(entity);
+      await context.SaveChangesAsync();
+
+      var response = new ProductResponse(
+        entity.Id,
+        entity.Sku,
+        entity.Name,
+        entity.Description,
+        entity.Barcode,
+        entity.ReorderThreshold,
+        entity.MinimumReorderQuantity,
+        entity.UnitCost,
+        entity.CreatedAt,
+        entity.UpdatedAt
+      );
+
+      return CreatedAtAction(nameof(GetProduct), new { id = entity.Id }, response);
+    }
   }
 }
+
