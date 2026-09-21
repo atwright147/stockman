@@ -73,6 +73,41 @@ namespace StockMan.Controllers
 
       return CreatedAtAction(nameof(GetProduct), new { id = entity.Id }, response);
     }
+
+    // PUT: api/products
+    [HttpPut()]
+    public async Task<ActionResult<ProductResponse>> PutProduct(ProductUpdateRequest product)
+    {
+      var entity = new Product
+      {
+        Sku = product.Sku ?? "",
+        Name = product.Name ?? "",
+        Description = product.Description,
+        Barcode = product.Barcode,
+        ReorderThreshold = product.ReorderThreshold ?? 0,
+        MinimumReorderQuantity = product.MinimumReorderQuantity ?? 0,
+        UnitCost = product.UnitCost ?? 0,
+        CreatedAt = DateTime.UtcNow,
+      };
+
+      // context.Products.Add(entity);
+      // await context.SaveChangesAsync();
+
+      var response = new ProductResponse(
+        entity.Id,
+        entity.Sku,
+        entity.Name,
+        entity.Description,
+        entity.Barcode,
+        entity.ReorderThreshold,
+        entity.MinimumReorderQuantity,
+        entity.UnitCost,
+        entity.CreatedAt,
+        entity.UpdatedAt
+      );
+
+      return CreatedAtAction(nameof(PutProduct), new { id = entity.Id }, response);
+    }
   }
 }
 
