@@ -13,7 +13,7 @@ using StockMan.Models;
 
 namespace StockMan.Controllers
 {
-  [Route("api/location")]
+  [Route("api/locations")]
   [ApiController]
   [Authorize]
   public class LocationController(ApplicationDbContext context) : ControllerBase

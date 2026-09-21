@@ -8,7 +8,7 @@ POST {{HostAddress}}/api/Auth/login
 Content-Type: application/json
 
 {
-  "Email": "andy@example.com",
+  "Email": "admin@stockman.local",
   "Password": "P@ssword1"
 }
 
@@ -94,13 +94,11 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "sku": "SKU-1001",
-  "name": "Widget",
-  "description": "A standard widget",
-  "barcode": "0123456789012",
-  "reorderThreshold": 10,
-  "minimumReorderQuantity": 25,
-  "unitCost": 4.99
+  "Aisle": "Aisle 1",
+  "Shelf": "Shelf 1",
+  "Container": "Container 42",
+  "Code": "123456",
+  "IsActive": 1
 }
 
 ###
@@ -110,18 +108,60 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "sku": "SKU-1001",
-  "name": "Widget Pro",
-  "description": "An upgraded widget",
-  "barcode": "0123456789012",
-  "reorderThreshold": 8,
-  "minimumReorderQuantity": 20,
-  "unitCost": 6.49
+  "Aisle": "Aisle 1",
+  "Shelf": "Shelf 1",
+  "Container": "Container 42",
+  "Code": "567890",
+  "IsActive": 1
 }
 
 ###
 
 DELETE {{HostAddress}}/api/locations/1
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+GET {{HostAddress}}/api/stock-levels
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+GET {{HostAddress}}/api/stock-levels/1
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+POST {{HostAddress}}/api/stock-levels
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "locationId": 1,
+  "quantityOnHand": 147,
+  "quantityAllocated": 42
+}
+
+###
+
+PUT {{HostAddress}}/api/stock-levels/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "locationId": 1,
+  "quantityOnHand": 147,
+  "quantityAllocated": 42
+}
+
+###
+
+DELETE {{HostAddress}}/api/stock-levels/1
 Authorization: Bearer {{authToken}}
 Accept: application/json
 

@@ -10,7 +10,10 @@ namespace StockMan.Data
     ApplicationDbContext db,
     UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole> roleManager,
-    int productCount = 100, int locationCount = 25)
+    int productCount = 100,
+    int locationCount = 25,
+    int stockLevelCount = 25
+  )
   {
     public async Task SeedAsync()
     {
@@ -49,6 +52,35 @@ namespace StockMan.Data
 
       await db.Locations.AddRangeAsync(locations);
 
+      // Persist products and locations first so their database-generated Ids
+      // are available for the stock level foreign keys below.
+      await db.SaveChangesAsync();
+
+      // StockLevels has a unique index on (ProductId, LocationId), so build
+      // distinct pairs from the cartesian product of the persisted Ids.
+      var distinctPairs = (from product in products
+                           from location in locations
+                           select (ProductId: product.Id, LocationId: location.Id))
+        .OrderBy(_ => Guid.NewGuid())
+        .Take(stockLevelCount)
+        .ToList();
+
+      var fakerStockLevels = new Faker<StockLevel>()
+        .RuleFor(sl => sl.QuantityOnHand, f => f.Random.Int(0, 500))
+        .RuleFor(sl => sl.QuantityAllocated, (f, sl) => f.Random.Int(0, sl.QuantityOnHand))
+        .RuleFor(sl => sl.CreatedAt, f => f.Date.Past(1))
+        .RuleFor(sl => sl.UpdatedAt, (f, sl) => f.Random.Bool(0.5f) ? f.Date.Between(sl.CreatedAt, DateTime.UtcNow) : null);
+
+      var stockLevels = fakerStockLevels.Generate(distinctPairs.Count);
+
+      for (var i = 0; i < stockLevels.Count; i++)
+      {
+        stockLevels[i].ProductId = distinctPairs[i].ProductId;
+        stockLevels[i].LocationId = distinctPairs[i].LocationId;
+      }
+
+      await db.StockLevel.AddRangeAsync(stockLevels);
+
       await db.SaveChangesAsync();
     }
 
@@ -80,7 +112,7 @@ namespace StockMan.Data
         EmailConfirmed = true,
       };
 
-      var result = await userManager.CreateAsync(admin, "Admin123!");
+      var result = await userManager.CreateAsync(admin, "P@ssword1");
 
       if (result.Succeeded)
       {
