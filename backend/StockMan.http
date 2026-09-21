@@ -55,7 +55,7 @@ Content-Type: application/json
 
 ###
 
-PUT {{HostAddress}}/api/products
+PUT {{HostAddress}}/api/products/1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 

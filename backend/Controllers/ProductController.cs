@@ -75,38 +75,28 @@ namespace StockMan.Controllers
     }
 
     // PUT: api/products
-    [HttpPut()]
-    public async Task<ActionResult<ProductResponse>> PutProduct(ProductUpdateRequest product)
+    [HttpPut("{id}")]
+    public async Task<ActionResult<ProductResponse>> PutProduct(int id, ProductUpdateRequest product)
     {
-      var entity = new Product
+      var existingEntity = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+      if (existingEntity == null)
       {
-        Sku = product.Sku ?? "",
-        Name = product.Name ?? "",
-        Description = product.Description,
-        Barcode = product.Barcode,
-        ReorderThreshold = product.ReorderThreshold ?? 0,
-        MinimumReorderQuantity = product.MinimumReorderQuantity ?? 0,
-        UnitCost = product.UnitCost ?? 0,
-        CreatedAt = DateTime.UtcNow,
-      };
+        return NotFound();
+      }
 
-      // context.Products.Add(entity);
-      // await context.SaveChangesAsync();
+      existingEntity.Sku = product.Sku ?? "";
+      existingEntity.Name = product.Name ?? "";
+      existingEntity.Description = product.Description;
+      existingEntity.Barcode = product.Barcode;
+      existingEntity.ReorderThreshold = product.ReorderThreshold ?? 0;
+      existingEntity.MinimumReorderQuantity = product.MinimumReorderQuantity ?? 0;
+      existingEntity.UnitCost = product.UnitCost ?? 0;
+      existingEntity.UpdatedAt = DateTime.UtcNow;
 
-      var response = new ProductResponse(
-        entity.Id,
-        entity.Sku,
-        entity.Name,
-        entity.Description,
-        entity.Barcode,
-        entity.ReorderThreshold,
-        entity.MinimumReorderQuantity,
-        entity.UnitCost,
-        entity.CreatedAt,
-        entity.UpdatedAt
-      );
+      await context.SaveChangesAsync();
 
-      return CreatedAtAction(nameof(PutProduct), new { id = entity.Id }, response);
+      return StatusCode(StatusCodes.Status201Created, existingEntity);
     }
   }
 }
