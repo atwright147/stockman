@@ -67,9 +67,7 @@ namespace StockMan.Data
 
       var fakerStockLevels = new Faker<StockLevel>()
         .RuleFor(sl => sl.QuantityOnHand, f => f.Random.Int(0, 500))
-        .RuleFor(sl => sl.QuantityAllocated, (f, sl) => f.Random.Int(0, sl.QuantityOnHand))
-        .RuleFor(sl => sl.CreatedAt, f => f.Date.Past(1))
-        .RuleFor(sl => sl.UpdatedAt, (f, sl) => f.Random.Bool(0.5f) ? f.Date.Between(sl.CreatedAt, DateTime.UtcNow) : null);
+        .RuleFor(sl => sl.QuantityAllocated, (f, sl) => f.Random.Int(0, sl.QuantityOnHand));
 
       var stockLevels = fakerStockLevels.Generate(distinctPairs.Count);
 

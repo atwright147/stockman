@@ -166,3 +166,15 @@ Authorization: Bearer {{authToken}}
 Accept: application/json
 
 ###
+
+GET {{HostAddress}}/api/stock-transactions
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+GET {{HostAddress}}/api/stock-transactions/1
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

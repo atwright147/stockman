@@ -35,9 +35,7 @@ namespace StockMan.Controllers
           sl.ProductId,
           sl.LocationId,
           sl.QuantityOnHand,
-          sl.QuantityAllocated,
-          sl.CreatedAt,
-          sl.UpdatedAt
+          sl.QuantityAllocated
         ))
         .FirstOrDefaultAsync();
 

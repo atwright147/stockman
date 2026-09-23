@@ -22,8 +22,6 @@ namespace StockMan.Contracts
     int ProductId,
     int LocationId,
     int QuantityOnHand,
-    int QuantityAllocated,
-    DateTime CreatedAt,
-    DateTime? UpdatedAt
+    int QuantityAllocated
   );
 }
