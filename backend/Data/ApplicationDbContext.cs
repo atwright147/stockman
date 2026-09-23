@@ -13,80 +13,21 @@ namespace StockMan.Data
     public DbSet<StockLevel> StockLevel { get; set; }
     public DbSet<StockTransaction> StockTransaction { get; set; }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+      foreach (var entry in ChangeTracker.Entries<StockLevel>()
+        .Where(e => e.State is EntityState.Added or EntityState.Modified))
+      {
+        entry.Entity.RowVersion = Guid.NewGuid().ToByteArray();
+      }
+
+      return base.SaveChangesAsync(cancellationToken);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
-
-      // Product Constraints
-      modelBuilder.Entity<Product>(entity =>
-      {
-        entity.HasIndex(p => p.Sku).IsUnique();
-        entity.HasIndex(p => p.Barcode).IsUnique();
-      });
-
-      // Location Constraints
-      modelBuilder.Entity<Location>(entity => entity.HasIndex(l => l.Code).IsUnique());
-
-      // StockLevel Composite Unique Index (One location can only have one entry per product)
-      modelBuilder.Entity<StockLevel>(entity =>
-      {
-        entity.HasIndex(sl => new { sl.ProductId, sl.LocationId }).IsUnique();
-
-        // Computed column ignored by EF migrations
-        entity.Ignore(sl => sl.QuantityAvailable);
-      });
-
-      // StockTransaction Relationships
-      modelBuilder.Entity<StockTransaction>(entity =>
-      {
-        entity.HasOne(st => st.FromLocation)
-                .WithMany()
-                .HasForeignKey(st => st.FromLocationId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-        entity.HasOne(st => st.ToLocation)
-                .WithMany()
-                .HasForeignKey(st => st.ToLocationId)
-                .OnDelete(DeleteBehavior.Restrict);
-      });
+      modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
   }
 }
-
-/*
-        // Product Constraints
-        modelBuilder.Entity<Product>(entity =>
-        {
-            entity.HasIndex(p => p.SKU).IsUnique();
-            entity.HasIndex(p => p.Barcode).IsUnique();
-        });
-
-        // Location Constraints
-        modelBuilder.Entity<Location>(entity =>
-        {
-            entity.HasIndex(l => l.Code).IsUnique();
-        });
-
-        // StockLevel Composite Unique Index (One location can only have one entry per product)
-        modelBuilder.Entity<StockLevel>(entity =>
-        {
-            entity.HasIndex(sl => new { sl.ProductId, sl.LocationId }).IsUnique();
-
-            // Computed column ignored by EF migrations
-            entity.Ignore(sl => sl.QuantityAvailable);
-        });
-
-        // StockTransaction Relationships
-        modelBuilder.Entity<StockTransaction>(entity =>
-        {
-            entity.HasOne(st => st.FromLocation)
-                  .WithMany()
-                  .HasForeignKey(st => st.FromLocationId)
-                  .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(st => st.ToLocation)
-                  .WithMany()
-                  .HasForeignKey(st => st.ToLocationId)
-                  .OnDelete(DeleteBehavior.Restrict);
-        });
-*/

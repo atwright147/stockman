@@ -13,7 +13,6 @@ namespace StockMan.Models
     public int QuantityOnHand { get; set; }
     public int QuantityAllocated { get; set; }
     public int QuantityAvailable => QuantityOnHand - QuantityAllocated;
-    [Timestamp]
     public byte[] RowVersion { get; set; } = null!;
   }
 }
