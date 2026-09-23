@@ -1,0 +1,30 @@
+<Project>
+
+  <!--
+    Repo-root build defaults. Applies to backend/StockMan.csproj and any future
+    .NET project added under this repository (MSBuild walks up from each project
+    directory to the first Directory.Build.props it finds).
+  -->
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+      Makes the IDExxxx code-style rules declared in .editorconfig (IDE0005,
+      IDE0051, IDE0052, file-scoped namespaces, ...) actually run during
+      `dotnet build` instead of IDE/`dotnet format` only.
+    -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <!-- Required by Roslyn for IDE0005 to report on build. See dotnet/roslyn#41640. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- We enable the doc file only as the IDE0005 enabler; we do not require XML docs. -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+</Project>

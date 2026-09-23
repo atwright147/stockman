@@ -1,8 +1,7 @@
-namespace StockMan.Entities
+namespace StockMan.Entities;
+
+public static class Roles
 {
-  public static class Roles
-  {
-    public const string Admin = "Admin";
-    public const string User = "User";
-  }
+  public const string Admin = "Admin";
+  public const string User = "User";
 }
