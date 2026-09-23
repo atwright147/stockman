@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "biomejs.biome",
+    "editorconfig.editorconfig",
+    "humao.rest-client",
+    "mrmlnc.vscode-duplicate",
+    "mxsdev.typescript-explorer",
+    "jakubkozera.csharp-dev-tools",
+    "ms-dotnettools.vscode-dotnet-runtime",
+    "kreativ-software.csharpextensions",
+    "task.vscode-task",
+  ]
+}

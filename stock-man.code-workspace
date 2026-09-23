@@ -36,6 +36,12 @@
 	],
   "settings": {
     "biome.enabled": true,
+    "oxc.enable": false,
+    "oxc.enable.oxlint": false,
+    "oxc.enable.oxfmt": false,
+    "eslint.enable": false,
+    "eslint.probe": [],
+    "prettier.enable": false,
     "biome.configurationPath": "biome.json",
     "editor.defaultFormatter": "biomejs.biome",
     "editor.formatOnSave": true,
