@@ -68,7 +68,7 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
     return CreatedAtAction(nameof(GetProduct), new { id = entity.Id }, response);
   }
 
-  // PUT: api/products
+  // PUT: api/products/2
   [HttpPut("{id}")]
   public async Task<ActionResult<ProductResponse>> PutProduct(int id, ProductUpdateRequest product)
   {
