@@ -92,5 +92,23 @@ public class ProductController(ApplicationDbContext context) : ControllerBase
 
     return StatusCode(StatusCodes.Status201Created, existingEntity);
   }
+
+  // DELETE api/product/1
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> DeleteProduct(int id)
+  {
+    var product = await context.Products.FindAsync(id);
+
+    if (product == null)
+    {
+      return NotFound();
+    }
+
+    context.Products.Remove(product);
+    await context.SaveChangesAsync();
+
+    return NoContent();
+  }
+
 }
 
