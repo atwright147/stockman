@@ -10,6 +10,11 @@ public class StockTransactionConfiguration : IEntityTypeConfiguration<StockTrans
   {
     builder.HasKey(entity => entity.Id);
 
+    builder.HasOne(entity => entity.Product)
+      .WithMany()
+      .HasForeignKey(entity => entity.ProductId)
+      .OnDelete(DeleteBehavior.Restrict);
+
     builder.HasOne(entity => entity.FromLocation)
       .WithMany()
       .HasForeignKey(entity => entity.FromLocationId)

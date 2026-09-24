@@ -16,6 +16,16 @@ public class StockLevelConfiguration : IEntityTypeConfiguration<StockLevel>
       entity.LocationId
     }).IsUnique();
 
+    builder.HasOne(entity => entity.Product)
+      .WithMany()
+      .HasForeignKey(entity => entity.ProductId)
+      .OnDelete(DeleteBehavior.Restrict);
+
+    builder.HasOne(entity => entity.Location)
+      .WithMany()
+      .HasForeignKey(entity => entity.LocationId)
+      .OnDelete(DeleteBehavior.Restrict);
+
     // Computed column ignored by EF migrations
     builder.Ignore(entity => entity.QuantityAvailable);
 
