@@ -19,11 +19,11 @@ public class LocationController(ApplicationDbContext context) : ControllerBase
     return context.Locations.ToList();
   }
 
-  // GET: api/location/5
+  // GET: api/locations/5
   [HttpGet("{id}")]
   public async Task<ActionResult<LocationResponse>> GetLocation(int id)
   {
-    var product = await context.Locations
+    var location = await context.Locations
       .Where(l => l.Id == id)
       .Select(l => new LocationResponse(
         l.Id,
@@ -37,10 +37,10 @@ public class LocationController(ApplicationDbContext context) : ControllerBase
       ))
       .FirstOrDefaultAsync();
 
-    return product ?? (ActionResult<LocationResponse>)NotFound();
+    return location ?? (ActionResult<LocationResponse>)NotFound();
   }
 
-  // POST api/location/1
+  // POST api/locations/1
   [HttpPost()]
   public async Task<ActionResult<LocationResponse>> PostLocation(LocationCreateRequest location)
   {
@@ -92,5 +92,22 @@ public class LocationController(ApplicationDbContext context) : ControllerBase
     await context.SaveChangesAsync();
 
     return StatusCode(StatusCodes.Status201Created, existingEntity);
+  }
+
+  // DELETE api/locations/1
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> DeleteLocation(int id)
+  {
+    var location = await context.Locations.FindAsync(id);
+
+    if (location == null)
+    {
+      return NotFound();
+    }
+
+    context.Locations.Remove(location);
+    await context.SaveChangesAsync();
+
+    return NoContent();
   }
 }
